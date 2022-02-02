@@ -35,7 +35,6 @@ for name in \
     global_multisection \
     graphchecker \
     kaffpa \
-    kaffpaE \
     label_propagation \
     node_ordering \
     node_separator \

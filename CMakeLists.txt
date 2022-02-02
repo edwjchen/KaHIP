@@ -183,17 +183,6 @@ set(LIBKAFFPA_SOURCE_FILES
   extern/argtable3-3.0.3/argtable3.c)
 add_library(libkaffpa OBJECT ${LIBKAFFPA_SOURCE_FILES})
 
-set(LIBKAFFPA_PARALLEL_SOURCE_FILES
-  lib/parallel_mh/parallel_mh_async.cpp
-  lib/parallel_mh/population.cpp
-  lib/parallel_mh/galinier_combine/gal_combine.cpp
-  lib/parallel_mh/galinier_combine/construct_partition.cpp
-  lib/parallel_mh/exchange/exchanger.cpp
-  lib/tools/graph_communication.cpp
-  lib/tools/mpi_tools.cpp)
-add_library(libkaffpa_parallel OBJECT ${LIBKAFFPA_PARALLEL_SOURCE_FILES})
-target_include_directories(libkaffpa_parallel PUBLIC ${MPI_CXX_INCLUDE_PATH})
-
 set(LIBMAPPING_SOURCE_FILES
   lib/mapping/local_search_mapping.cpp
   lib/mapping/full_search_space.cpp
@@ -273,12 +262,6 @@ if(LIB_METIS)
 endif()
 install(TARGETS interface_test DESTINATION bin)
 
-add_executable(kaffpaE app/kaffpaE.cpp $<TARGET_OBJECTS:libkaffpa> $<TARGET_OBJECTS:libmapping> $<TARGET_OBJECTS:libkaffpa_parallel>)
-target_compile_definitions(kaffpaE PRIVATE "-DMODE_KAFFPAE")
-target_include_directories(kaffpaE PUBLIC ${MPI_CXX_INCLUDE_PATH})
-target_link_libraries(kaffpaE ${MPI_CXX_LIBRARIES} ${OpenMP_CXX_LIBRARIES} OpenMP::OpenMP_CXX )
-install(TARGETS kaffpaE DESTINATION bin)
-
 add_executable(graphchecker app/graphchecker.cpp $<TARGET_OBJECTS:libkaffpa> $<TARGET_OBJECTS:libmapping>)
 target_compile_definitions(graphchecker PRIVATE "-DMODE_GRAPHCHECKER")
 target_link_libraries(graphchecker ${OpenMP_CXX_LIBRARIES})
@@ -332,12 +315,6 @@ install(TARGETS kahip_static
         LIBRARY DESTINATION lib
         PUBLIC_HEADER DESTINATION include
         )
-
-# ParHIP
-if(PARHIP)
-  add_subdirectory(parallel/modified_kahip)
-  add_subdirectory(parallel/parallel_src)
-endif()
 
 if(USE_ILP)
   find_package(Gurobi REQUIRED)
