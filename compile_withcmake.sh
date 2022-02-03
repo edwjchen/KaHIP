@@ -11,9 +11,7 @@ Darwin)
 esac
 [ -n "$NCORES" ] || NCORES=4
 
-rm -rf deploy
-rm -rf build
-mkdir build
+mkdir -p build
 
 if [ "$1" == "BUILDPYTHONMODULE" ]; then
     cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DBUILDPYTHONMODULE=On
@@ -24,7 +22,7 @@ fi
 
 echo
 echo "Copying files into 'deploy'"
-mkdir deploy
+mkdir -p deploy
 
 # Serial
 echo
